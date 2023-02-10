@@ -21,6 +21,7 @@ dim(DiUbi)
 
 # Load example
 data <- UbiLength
+boxplot(data[,9:20])
 data <- data[data$Reverse != "+" & data$Potential.contaminant != "+",]
 data_unique <- make_unique(data, "Gene.names", "Protein.IDs", delim = ";")
 
@@ -33,8 +34,11 @@ head(assays(se)[[1]])
 # Filter, normalize and impute missing values
 filt <- filter_missval(se, thr = 0)
 norm <- normalize_vsn(filt)
+boxplot(assays(norm)[[1]])
 norm.2 <- as.matrix(assays(filt)[[1]])        #Gives better normalization for this data
+boxplot(norm.2)
 imputed <- impute(norm, fun = "MinProb", q = 0.01)
+boxplot(assays(imputed)[[1]])
 
 # Test for differentially expressed proteins
 diff <- test_diff(imputed, "control", "Ctrl")
